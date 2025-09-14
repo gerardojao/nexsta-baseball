@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NEXSTA — Deportes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="assets/logo.svg">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">
+        <img src="assets/logo.svg" alt="Nexsta logo" class="brand__logo" />
+        <span class="brand__name">NEXSTA</span>
+      </a>
+      <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="site-nav" aria-label="Principal">
+        <ul>
+          <li><a href="#deportes">Sports</a></li>
+          <li><a href="index.html#cultura">Arts</a></li>
+          <li><a href="index.html#gastronomia">Cuisine</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- HERO DEPORTES (Imagen #4 de referencia) -->
+    <section id="deportes" class="hero hero--overlay" style="--hero-image:url('assets/beisbol-turia.jpg')">
+      <div class="container hero__inner">
+        <h1>Más cerca del juego!</h1>
+        <p class="lead lead--large">Cinco equipos. Dos días. Un solo campeón. Molina de Segura · 20–21 Septiembre</p>
+        <p class="hero__actions">
+          <a class="btn btn--ghost dotted" href="https://www.youtube.com/@gerardojao">Ver directo →</a>
+        </p>
+      </div>
+    </section>
+
+    <!-- Próximos partidos (Imagen #5) -->
+<section id="proximos" class="container section" data-matches-src="assets/matches.json">
+  <header class="section__head">
+    <h2>No te lo pierdas!</h2>
+    <p class="muted">Vive la emoción del béisbol en directo. Próximos partidos que no te puedes perder.</p>
+  </header>
+
+  <div id="matches-grid" class="cards-grid"><!-- JS inserta aquí --></div>
+</section>
+
+    <!-- Últimos resultados + Tabla posiciones (Imagen #6) -->
+  <section class="container section two-col">
+  <div>
+    <h3 class="section__sub">Latest Matches</h3>
+    <ul class="links" id="latest-matches">
+      <!-- opcional: lo dinámico lo dejamos para luego -->
+      <li><a href="#">VAL 5–3 MUR · Final — Watch Replay →</a></li>
+      <li><a href="#">VLC 2–1 ALI · Final — Watch Replay →</a></li>
+    </ul>
+  </div>
+
+  <div>
+    <h3 class="section__sub">STANDINGS</h3>
+    <div class="table-card">
+      <table id="standings" data-src="assets/standings.csv" aria-live="polite">
+        <thead>
+          <tr><th>Team</th><th>Wins</th><th>Losses</th></tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="3">Cargando…</td></tr>
+        </tbody>
+      </table>
+      <p id="standings-error" class="muted" style="display:none"></p>
+    </div>
+  </div>
+</section>
+
+<!-- HIGHLIGHTS -->
+ <section id="players" class="section">
+  <div class="container">
+    <h2 class="players__title">PLAYERS TO WATCH</h2>
+
+    <div class="players-grid">
+      <article class="player-card">
+        <h3 class="player-card__name">Axel Arrieta</h3>
+        <img src="assets/axel.png" alt="Axel Arrieta">
+        <p class="player-card__stat">SS · AVG .295</p>
+      </article>
+
+      <article class="player-card">
+        <h3 class="player-card__name">Celis Flames</h3>
+        <img src="assets/celis.jpg" alt="Celis Flames lanzando">
+        <p class="player-card__stat">1a · AVG .277</p>
+      </article>
+
+      <article class="player-card">
+        <h3 class="player-card__name">Cesar Doreste</h3>
+        <img src="assets/cesar.jpg" alt="Cesar Doreste">
+        <p class="player-card__stat">CF · AVG .280</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+    <!-- Destacados (Imagen #7) -->
+    <section id="directo" class="container section">
+      <h3 class="section__sub">HIGHLIGHTS</h3>
+      <div class="highlights">
+      <div class="video-embed">
+      <iframe
+        src="https://www.youtube.com/embed/WsZeezMdrNY?feature=oembed&rel=0&modestbranding=1"
+        title="Video 1"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen
+        referrerpolicy="strict-origin-when-cross-origin">
+      </iframe>
+    </div>
+      <div class="video-embed">
+      <iframe
+        src="https://www.youtube-nocookie.com/embed/UgF6MIguiHs?start=9679&end=9687&feature=oembed&rel=0&modestbranding=1"
+        title="Clip recortado"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen
+        referrerpolicy="strict-origin-when-cross-origin">
+      </iframe>
+    </div>
+        <div class="video-embed"><iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Video 3" frameborder="0" allowfullscreen></iframe></div>
+      </div>     
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2025 nexsta.es. gerardojao</p>
+    </div>
+  </footer>
+
+  <button class="to-top" aria-label="Volver arriba">↑</button>
+  <script src="app.js"></script>
+</body>
+</html>

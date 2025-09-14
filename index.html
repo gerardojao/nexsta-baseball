@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NEXSTA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="assets/logo-nexsta.png">
+</head>
+<body>
+  <a class="skip-link" href="#main">Saltar al contenido</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">
+        <img src="assets/logo-nexsta.png" alt="Nexsta logo" class="brand__logo" />
+        <span class="brand__name">NEXSTA</span>
+      </a>
+
+      <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" aria-label="Principal">
+        <ul>
+          <li><a href="eventos.html#deportes">Sports</a></li>
+          <li><a href="#cultura">Arts</a></li>
+          <li><a href="#gastronomia">Cuisine</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- HERO -->
+    <section class="hero" style="--hero-image:url('assets/de-valencia.jpg')">
+      <div class="container hero__inner">
+        <h1>De Valencia al mundo</h1>
+        <p class="lead">Deporte, cultura y sabor en una sola pantalla.</p>
+        <p class="hero__actions">
+          <a class="btn btn--primary" href="eventos.html">Ver lo último →</a>
+        </p>
+      </div>
+    </section>
+
+    
+    <!-- CATEGORÍAS -->
+    <section class="categories container">
+      <article class="category">
+        <a class="card" href="eventos.html#deportes">
+          <img src="https://picsum.photos/seed/deportes/600/400" alt="Béisbol en acción" />
+        </a>
+        <h2 class="category__title">DEPORTES</h2>
+        <p>Últimos partidos, repeticiones y transmisiones en directo. El juego como nunca lo viste.</p>
+        <p><a href="eventos.html#deportes" class="btn btn--primary">explorar</a></p>
+      </article>
+
+      <article id="cultura" class="category">
+        <a class="card" href="#cultura">
+          <img src="https://picsum.photos/seed/cultura/600/400" alt="Arte escénico" />
+        </a>
+        <h2 class="category__title">CULTURA</h2>
+        <p>Historias, arte y música desde Valencia hacia el mundo. Una mirada fresca a la creatividad.</p>
+        <p><a href="#cultura" class="btn btn--primary">explorar</a></p>
+      </article>
+
+      <article id="gastronomia" class="category">
+        <a class="card" href="#gastronomia">
+          <img src="https://picsum.photos/seed/gastro/600/400" alt="Paella valenciana" />
+        </a>
+        <h2 class="category__title">GASTRONOMÍA</h2>
+        <p>Recetas, sabores e inspiración culinaria. El espíritu de Valencia en cada plato.</p>
+        <p><a href="#gastronomia" class="btn btn--primary">explorar</a></p>
+      </article>
+    </section>
+
+    <!-- CTA VIDEO / TEASER -->
+    <section class="teaser container">
+      <div class="teaser__media">
+        <div class="video-embed">
+          <!-- Reemplaza el src con tu video de YouTube -->
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/wLF_i1pXJr8?feature=oembed&rel=0&modestbranding=1"
+            title="YouTube video player" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          
+        </div>
+      </div>
+      <div class="teaser__content">
+        <h2>Más cerca del juego</h2>
+        <p>Clips, entrevistas y play-by-play con lo mejor de la jornada. Disfruta una experiencia pensada para fans.</p>
+        <a class="btn" href="eventos.html">Ir a Deportes →</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2025 nexsta.es. Proudly powered by panamedia</p>
+    </div>
+  </footer>
+
+  <button class="to-top" aria-label="Volver arriba">↑</button>
+  <script src="app.js"></script>
+</body>
+</html>
