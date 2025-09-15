@@ -183,28 +183,28 @@ document.addEventListener('DOMContentLoaded', renderMatchesSection);
 const form  = document.getElementById('form-contacto');
 const modal = document.getElementById('thanks-modal');
 
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
+// form.addEventListener('submit', async (e) => {
+//   e.preventDefault();
 
-  const fd = new FormData(form);
-  fd.set('form-name', form.getAttribute('name') || 'contacto'); // requerido por Netlify
+//   const fd = new FormData(form);
+//   fd.set('form-name', form.getAttribute('name') || 'contacto'); // requerido por Netlify
 
-  const r = await fetch('/', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Accept': 'application/json'   // ← AQUÍ va
-    },
-    body: new URLSearchParams(fd).toString()
-  });
+//   const r = await fetch('/', {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/x-www-form-urlencoded',
+//       'Accept': 'application/json'   // ← AQUÍ va
+//     },
+//     body: new URLSearchParams(fd).toString()
+//   });
 
-  if (r.ok) {
-    form.reset();
-    openModal(); // o tu mensaje de éxito
-  } else {
-    // manejo de error...
-  }
-});
+//   if (r.ok) {
+//     form.reset();
+//     openModal(); // o tu mensaje de éxito
+//   } else {
+//     // manejo de error...
+//   }
+// });
 // ===== Formulario Netlify + modal (sin thanks.html) =====
 
 
