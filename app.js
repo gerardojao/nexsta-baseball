@@ -237,13 +237,14 @@ if (form) {
       });
 
       if (r.ok) {
-        form.reset();
+
         // Toma el nombre COMPLETO tal cual lo escribió la persona
         const fullName = (form.name?.value || '').trim();
 
         // Inserta de forma segura en el span del modal
         const span = document.getElementById('thanks-name');
         if (span) span.textContent = fullName;
+        form.reset();
         openModal();
         return;
       }
@@ -256,13 +257,14 @@ if (form) {
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body
         });
-        form.reset();
+        
         // Toma el nombre COMPLETO tal cual lo escribió la persona
         const fullName = (form.name?.value || '').trim();
 
         // Inserta de forma segura en el span del modal
         const span = document.getElementById('thanks-name');
         if (span) span.textContent = fullName;
+        form.reset();
         openModal();
         return;
       }
