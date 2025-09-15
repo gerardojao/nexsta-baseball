@@ -296,3 +296,66 @@ if (modal) {
     }
   });
 }
+
+// ---- CSV helper mínimo (autodetecta ; o ,) ----
+async function _loadCSV(url){
+  const res = await fetch(url + '?v=' + Date.now());
+  if(!res.ok) throw new Error('No se pudo cargar CSV: ' + url);
+  const text = await res.text();
+  const first = text.split(/\r?\n/)[0] || '';
+  const sep = (first.match(/;/g)||[]).length > (first.match(/,/g)||[]).length ? ';' : ',';
+  const lines = text.split(/\r?\n/).filter(l => l.trim().length);
+  const header = lines.shift().split(sep).map(h => h.trim());
+  return lines.map(l=>{
+    const cols = l.split(sep).map(c=>c.trim());
+    const o = {};
+    header.forEach((h,i)=>o[h] = cols[i] ?? '');
+    return o;
+  });
+}
+
+// ---- Render Latest Matches desde CSV ----
+function _fmtRow(r){
+  const dash = '–';
+  const home = r.home_code || r.home || '';
+  const away = r.away_code || r.away || '';
+  const hs = r.home_score ?? r.hs ?? '';
+  const as = r.away_score ?? r.as ?? '';
+  const stage = r.stage ? ` · ${r.stage}` : '';
+  return `${home} ${hs}${dash}${as} ${away}${stage} — Watch Replay →`;
+}
+
+async function renderLatestMatches(){
+  const ul = document.querySelector('#latest-list[data-src]');
+  if(!ul) return;
+
+  ul.innerHTML = '<li class="muted">Cargando…</li>';
+
+  try{
+    const rows = await _loadCSV(ul.dataset.src);
+
+    // Orden por fecha DESC si hay date; si no, deja el orden del CSV
+    rows.sort((a,b)=>{
+      const da = Date.parse(a.date || a.fecha || ''), db = Date.parse(b.date || b.fecha || '');
+      return isNaN(db)-isNaN(da) || db - da;
+    });
+
+    const limit = parseInt(ul.dataset.limit || '5', 10);
+    const list = rows.slice(0, limit).map(r=>{
+      const label = _fmtRow(r);
+      const href  = r.replay || r.link || r.url || '';
+      return `<li>${
+        href
+          ? `<a href="${href}" target="_blank" rel="noopener noreferrer">${label}</a>`
+          : `<span>${label.replace(' — Watch Replay →','')}</span>`
+      }</li>`;
+    }).join('');
+
+    ul.innerHTML = list || '<li class="muted">Sin partidos recientes</li>';
+  }catch(err){
+    console.error(err);
+    ul.innerHTML = '<li class="muted">No se pudieron cargar los últimos partidos.</li>';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', renderLatestMatches);
