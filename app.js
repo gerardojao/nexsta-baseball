@@ -206,7 +206,7 @@ form.addEventListener('submit', async (e) => {
 const form  = document.getElementById('form-contacto');
 const modal = document.getElementById('thanks-modal');
 
-const NETLIFY_SITE = 'https://TU-SITIO.netlify.app'; // ← pon tu URL real
+const NETLIFY_SITE = 'https://nesxta-baseball.netlify.app'; // ← pon tu URL real
 
 function openModal(){
   if (!modal) return;
@@ -261,6 +261,22 @@ if (form) {
     } catch (err) {
       console.error(err);
       alert('No se pudo enviar. Revisa tu conexión.');
+    }
+  });
+}
+if (modal) {
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal || e.target.dataset.closeModal !== undefined) {
+      modal.classList.remove('is-open');
+      document.body.classList.remove('modal-open');
+      form.querySelector('input,textarea')?.focus();
+    }
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('is-open')) {
+      modal.classList.remove('is-open');
+      document.body.classList.remove('modal-open');
+      form.querySelector('input,textarea')?.focus();
     }
   });
 }
