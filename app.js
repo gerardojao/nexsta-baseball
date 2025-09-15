@@ -180,5 +180,87 @@ async function renderMatchesSection(){
 }
 document.addEventListener('DOMContentLoaded', renderMatchesSection);
 
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
 
+  const fd = new FormData(form);
+  fd.set('form-name', form.getAttribute('name') || 'contacto'); // requerido por Netlify
 
+  const r = await fetch('/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Accept': 'application/json'   // ← AQUÍ va
+    },
+    body: new URLSearchParams(fd).toString()
+  });
+
+  if (r.ok) {
+    form.reset();
+    openModal(); // o tu mensaje de éxito
+  } else {
+    // manejo de error...
+  }
+});
+// ===== Formulario Netlify + modal (sin thanks.html) =====
+const form  = document.getElementById('form-contacto');
+const modal = document.getElementById('thanks-modal');
+
+const NETLIFY_SITE = 'https://TU-SITIO.netlify.app'; // ← pon tu URL real
+
+function openModal(){
+  if (!modal) return;
+  modal.classList.add('is-open');
+  document.body.classList.add('modal-open');
+  modal.querySelector('[data-close-modal]')?.focus();
+}
+
+if (form) {
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const fd = new FormData(form);
+    fd.set('form-name', form.getAttribute('name') || 'contacto');
+    const body = new URLSearchParams(fd).toString();
+
+    try {
+      // 1) Intento normal (dev/prod) → Netlify Forms responde 200 JSON si todo va bien
+      const r = await fetch('/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Accept': 'application/json'
+        },
+        body
+      });
+
+      if (r.ok) {
+        form.reset();
+        openModal();
+        return;
+      }
+
+      // 2) Si falla (p. ej., 405 en dev), hacemos fallback a tu sitio público con no-cors
+      if (r.status === 405) {
+        await fetch(NETLIFY_SITE + '/', {
+          method: 'POST',
+          mode: 'no-cors', // envía el form a Netlify; no podemos leer respuesta
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body
+        });
+        form.reset();
+        openModal();
+        return;
+      }
+
+      // 3) Otros errores
+      const txt = await r.text();
+      console.error('Netlify Forms error:', r.status, txt);
+      alert('Hubo un problema. Intenta de nuevo.');
+
+    } catch (err) {
+      console.error(err);
+      alert('No se pudo enviar. Revisa tu conexión.');
+    }
+  });
+}
