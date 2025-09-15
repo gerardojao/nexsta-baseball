@@ -180,6 +180,9 @@ async function renderMatchesSection(){
 }
 document.addEventListener('DOMContentLoaded', renderMatchesSection);
 
+const form  = document.getElementById('form-contacto');
+const modal = document.getElementById('thanks-modal');
+
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
 
@@ -203,8 +206,7 @@ form.addEventListener('submit', async (e) => {
   }
 });
 // ===== Formulario Netlify + modal (sin thanks.html) =====
-const form  = document.getElementById('form-contacto');
-const modal = document.getElementById('thanks-modal');
+
 
 const NETLIFY_SITE = 'https://nesxta-baseball.netlify.app'; // ← pon tu URL real
 
