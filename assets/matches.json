@@ -91,7 +91,7 @@
     "title": "TIG vs ROC",
     "description": "Tigres y Rocosos se enfrentan garantinzando un partido emocionante. Síguelo en vivo.",
     "image": "assets/match-8.jpg",
-    "home": { "name": "MOL", "logo": "assets/tigres.png" },
+    "home": { "name": "MOL", "logo": "assets/tigres.jpeg" },
     "away": { "name": "TIG", "logo": "assets/rocosos.png" },
     "stream": "https://youtube.com/live/1JHk3Yk1mXo?feature=share"
   },

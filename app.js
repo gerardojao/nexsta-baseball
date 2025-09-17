@@ -201,23 +201,36 @@ function ensureMinSlides(trackEl, min){
 }
 
 // ---- slider vanilla ----
-function initMatchSlider(track, dotsEl, prevBtn, nextBtn, opts = {}){
-  const S = { index: 0, slidesPerView: opts.slidesPerView ?? 3, pages: 1 };
+function initMatchSlider(track, dotsEl, prevBtn, nextBtn){
+  const S = { index: 0, slidesPerView: 3, pages: 1 };
   const isInteractive = (el) => el.closest('a,button,input,textarea,select,label,[role="button"]');
 
+  const getSlidesPerView = () => (
+    window.innerWidth < 720 ? 1 :
+    window.innerWidth < 1024 ? 2 : 3
+  );
+
   function recalc(){
-    track.style.setProperty('--slides', S.slidesPerView); // siempre 3
+    S.slidesPerView = getSlidesPerView();
+    track.style.setProperty('--slides', S.slidesPerView);
+    track.style.setProperty('--gap', getComputedStyle(track).gap || '16px');
+
+    // ⬇️ FALTABA: calcular páginas según nº de slides
     S.pages = Math.max(1, Math.ceil(track.children.length / S.slidesPerView));
+
     if (S.index > S.pages - 1) S.index = S.pages - 1;
     update();
   }
+
   function go(i){ S.index = Math.max(0, Math.min(i, S.pages - 1)); update(); }
+
   function update(){
     track.style.transform = `translateX(-${S.index * 100}%)`;
     if (prevBtn) prevBtn.disabled = (S.index === 0);
     if (nextBtn) nextBtn.disabled = (S.index >= S.pages - 1);
     renderDots();
   }
+
   function renderDots(){
     if (!dotsEl) return;
     dotsEl.innerHTML = Array.from({length: S.pages}, (_,i) =>
@@ -226,15 +239,15 @@ function initMatchSlider(track, dotsEl, prevBtn, nextBtn, opts = {}){
     dotsEl.querySelectorAll('.dot').forEach((b,i)=> b.addEventListener('click',()=>go(i)));
   }
 
+  // ⬇️ FALTABAN: eventos de navegación
   prevBtn?.addEventListener('click', ()=>go(S.index - 1));
   nextBtn?.addEventListener('click', ()=>go(S.index + 1));
 
-  // Swipe sin interferir con enlaces/botones
+  // Swipe sin interferir con links/botones
   let startX = null, dx = 0, dragging = false;
   track.addEventListener('pointerdown', (e)=>{
     if (isInteractive(e.target)) return;
-    dragging = true;
-    startX = e.clientX; dx = 0;
+    dragging = true; startX = e.clientX; dx = 0;
     track.setPointerCapture(e.pointerId);
     track.classList.add('is-dragging');
   });
@@ -247,14 +260,13 @@ function initMatchSlider(track, dotsEl, prevBtn, nextBtn, opts = {}){
     dragging = false; startX = null; dx = 0;
   });
 
-  // (opcional) teclas ← →
-  window.addEventListener('keydown', (e)=>{
-    if (e.key === 'ArrowLeft') go(S.index - 1);
-    if (e.key === 'ArrowRight') go(S.index + 1);
-  });
+  // Recalcular en resize (debounce)
+  let t; window.addEventListener('resize', ()=>{ clearTimeout(t); t=setTimeout(recalc,120); });
 
-  recalc(); // no dependemos de resize: siempre 3
+  recalc();
 }
+
+
 
 
 
