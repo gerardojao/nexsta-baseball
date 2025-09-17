@@ -128,6 +128,8 @@ function matchCardTemplate(m){
     m.tournamentLogo || m.tournament_logo || m.logoTorneo || m['logo-torneo'] ||
     m.image || '';
 
+    
+
   // (Opcional) ayuda a depurar rutas:
   console.debug('match bg:', bg, 'title:', m.title);
 
@@ -151,61 +153,120 @@ function matchCardTemplate(m){
       <p class="meta"><span class="icon">📅</span> ${dateStr}</p>
       <h3>${m.title} | ${timeStr}</h3>
       <p>${m.description ?? ''}</p>
-      <a class="btn btn--primary" href="${m.stream || '#'}">Ver partido →</a>
+      <a target="_blank" class="btn btn--primary" href="${m.stream || '#'}">Ver partido →</a>
     </div>
   </article>`;
 }
-
-
 
 async function renderMatchesSection(){
   const sec = document.querySelector('#proximos[data-matches-src]');
   if(!sec) return;
 
-  const grid = document.getElementById('matches-grid');
-  grid.innerHTML = '<p class="muted">Cargando partidos…</p>';
+  const track = document.getElementById('match-track');
+  const dots  = document.getElementById('match-dots');
+  const prev  = document.querySelector('#match-slider .prev');
+  const next  = document.querySelector('#match-slider .next');
+
+  track.innerHTML = '<p class="muted">Cargando partidos…</p>';
 
   try{
     const url = sec.dataset.matchesSrc;
     const matches = await loadJSON(url);
 
-    // ordena por fecha
+    // ordena por fecha ascendente (próximos primero)
     matches.sort((a,b) => new Date(a.datetime) - new Date(b.datetime));
 
-    grid.innerHTML = matches.map(matchCardTemplate).join('');
+    // pinta como "slides"
+    track.innerHTML = matches.map(m => `<div class="slide">${matchCardTemplate(m)}</div>`).join('');
+
+    // Asegura mínimo 3 visibles: clona si hay menos de 3
+    ensureMinSlides(track, 3);
+
+    initMatchSlider(track, dots, prev, next, { slidesPerView: 3 }); // ← fijo a 3
   }catch(err){
     console.error(err);
-    grid.innerHTML = '<p class="muted">No se pudieron cargar los partidos.</p>';
+    track.innerHTML = '<p class="muted">No se pudieron cargar los partidos.</p>';
   }
 }
+
+// clona slides del inicio hasta llegar al mínimo requerido
+function ensureMinSlides(trackEl, min){
+  const count = trackEl.children.length;
+  if (count >= min) return;
+  for (let i = 0; i < (min - count); i++){
+    const clone = trackEl.children[i % count].cloneNode(true);
+    clone.classList.add('is-ghost'); // para estilo sutil si quieres
+    trackEl.appendChild(clone);
+  }
+}
+
+// ---- slider vanilla ----
+function initMatchSlider(track, dotsEl, prevBtn, nextBtn, opts = {}){
+  const S = { index: 0, slidesPerView: opts.slidesPerView ?? 3, pages: 1 };
+  const isInteractive = (el) => el.closest('a,button,input,textarea,select,label,[role="button"]');
+
+  function recalc(){
+    track.style.setProperty('--slides', S.slidesPerView); // siempre 3
+    S.pages = Math.max(1, Math.ceil(track.children.length / S.slidesPerView));
+    if (S.index > S.pages - 1) S.index = S.pages - 1;
+    update();
+  }
+  function go(i){ S.index = Math.max(0, Math.min(i, S.pages - 1)); update(); }
+  function update(){
+    track.style.transform = `translateX(-${S.index * 100}%)`;
+    if (prevBtn) prevBtn.disabled = (S.index === 0);
+    if (nextBtn) nextBtn.disabled = (S.index >= S.pages - 1);
+    renderDots();
+  }
+  function renderDots(){
+    if (!dotsEl) return;
+    dotsEl.innerHTML = Array.from({length: S.pages}, (_,i) =>
+      `<button class="dot${i===S.index?' is-active':''}" aria-label="Ir a página ${i+1}"></button>`
+    ).join('');
+    dotsEl.querySelectorAll('.dot').forEach((b,i)=> b.addEventListener('click',()=>go(i)));
+  }
+
+  prevBtn?.addEventListener('click', ()=>go(S.index - 1));
+  nextBtn?.addEventListener('click', ()=>go(S.index + 1));
+
+  // Swipe sin interferir con enlaces/botones
+  let startX = null, dx = 0, dragging = false;
+  track.addEventListener('pointerdown', (e)=>{
+    if (isInteractive(e.target)) return;
+    dragging = true;
+    startX = e.clientX; dx = 0;
+    track.setPointerCapture(e.pointerId);
+    track.classList.add('is-dragging');
+  });
+  track.addEventListener('pointermove', (e)=>{ if (dragging) dx = e.clientX - startX; });
+  track.addEventListener('pointerup', (e)=>{
+    if (!dragging) return;
+    track.releasePointerCapture(e.pointerId);
+    track.classList.remove('is-dragging');
+    if (Math.abs(dx) > 40) go(dx < 0 ? S.index + 1 : S.index - 1);
+    dragging = false; startX = null; dx = 0;
+  });
+
+  // (opcional) teclas ← →
+  window.addEventListener('keydown', (e)=>{
+    if (e.key === 'ArrowLeft') go(S.index - 1);
+    if (e.key === 'ArrowRight') go(S.index + 1);
+  });
+
+  recalc(); // no dependemos de resize: siempre 3
+}
+
+
+
 document.addEventListener('DOMContentLoaded', renderMatchesSection);
+
+
+
 
 const form  = document.getElementById('form-contacto');
 const modal = document.getElementById('thanks-modal');
 
-// form.addEventListener('submit', async (e) => {
-//   e.preventDefault();
 
-//   const fd = new FormData(form);
-//   fd.set('form-name', form.getAttribute('name') || 'contacto'); // requerido por Netlify
-
-//   const r = await fetch('/', {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/x-www-form-urlencoded',
-//       'Accept': 'application/json'   // ← AQUÍ va
-//     },
-//     body: new URLSearchParams(fd).toString()
-//   });
-
-//   if (r.ok) {
-//     form.reset();
-//     openModal(); // o tu mensaje de éxito
-//   } else {
-//     // manejo de error...
-//   }
-// });
-// ===== Formulario Netlify + modal (sin thanks.html) =====
 
 
 const NETLIFY_SITE = 'https://nesxta-baseball.netlify.app'; // ← pon tu URL real

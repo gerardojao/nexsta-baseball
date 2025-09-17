@@ -41,36 +41,62 @@
         <h1>Más cerca del juego!</h1>
         <p class="lead lead--large">Cinco equipos. Dos días. Un solo campeón. Molina de Segura · 20–21 Septiembre</p>
         <p class="hero__actions">
-          <a class="btn btn--ghost dotted" href="https://www.youtube.com/@gerardojao">Ver directo →</a>
+          <a class="btn btn--ghost dotted" href="#proximos">Ver directo →</a>
         </p>
       </div>
     </section>
 
     <!-- Próximos partidos (Imagen #5) -->
-<section id="proximos" class="container section" data-matches-src="assets/matches.json">
+<!-- <section id="proximos" class="container section" data-matches-src="assets/matches.json">
   <header class="section__head">
     <h2>No te lo pierdas!</h2>
     <p class="muted">Vive la emoción del béisbol en directo. Próximos partidos que no te puedes perder.</p>
   </header>
 
   <div id="matches-grid" class="cards-grid"></div>
+</section> -->
+<section id="proximos" class="section" data-matches-src="assets/matches.json">
+  <div class="container">
+    <h2 class="section__title">Próximos Partidos</h2>
+
+    <div class="match-slider" id="match-slider" aria-label="Próximos partidos">
+      <button class="slider-btn prev" aria-label="Anterior">‹</button>
+
+      <div class="slider-viewport">
+        <div class="slider-track" id="match-track"></div>
+      </div>
+
+      <button class="slider-btn next" aria-label="Siguiente">›</button>
+    </div>
+
+    <div class="slider-dots" id="match-dots" aria-label="Paginación"></div>
+  </div>
 </section>
+
 
     <!-- Últimos resultados + Tabla posiciones (Imagen #6) -->
   <section class="container section two-col">
   <div>
-    <h3 class="section__sub">Latest Matches</h3>
-     <ul id="latest-list"
+    <h3 class="section__sub">Últimos juegos</h3>
+     <!-- <ul id="latest-list"
     data-src="assets/latest-matches.csv"
-    data-limit="5"></ul>
+    data-limit="5"></ul> -->
+          <table  aria-live="polite">
+        <thead>
+          
+        </thead>
+        <tbody>
+          <tr><td colspan="3">Esperando inicio del torneo...</td></tr>
+        </tbody>
+      </table>
   </div>
 
   <div>
-    <h3 class="section__sub">STANDINGS</h3>
+    <h3 class="section__sub">ASÍ VAN</h3>
     <div class="table-card">
       <table id="standings" data-src="assets/standings.csv" aria-live="polite">
         <thead>
-          <tr><th>Team</th><th>Wins</th><th>Losses</th></tr>
+          <tr><th>Equipo</th><th>Ganados</th><th>Perdidos</th></tr>
         </thead>
         <tbody>
           <tr><td colspan="3">Cargando…</td></tr>
@@ -155,8 +181,17 @@
         referrerpolicy="strict-origin-when-cross-origin">
       </iframe>
     </div>
-        <div class="video-embed"><iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Video 3" frameborder="0" allowfullscreen></iframe></div>
-      </div>     
+    <div class="video-embed">
+      <iframe
+        src="https://www.youtube-nocookie.com/embed/S7Zti3hejss?start=9679&end=9687&feature=oembed&rel=0&modestbranding=1"
+        title="Clip recortado"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen
+        referrerpolicy="strict-origin-when-cross-origin">
+      </iframe>
+    </div>
+           
     </section>
   </main>
 
@@ -171,10 +206,7 @@
       <p class="footer-tagline">De Valencia al mundo: deportes, cultura y gastronomía.</p>
 
       <div class="socials">
-        <!-- Usa el logo oficial si lo tienes en assets/instagram.svg -->
-        <!-- <a class="social" href="https://instagram.com/nexsta.es" target="_blank" rel="me noopener noreferrer" aria-label="Instagram">
-          <img class="ig-mark" src="assets/instagram.svg" alt="Instagram">
-        </a> -->
+  
 
         <!-- O usa Font Awesome (ya lo cargaste) -->
         <a class="social" href="https://instagram.com/nexsta.es" target="_blank" rel="me noopener noreferrer" aria-label="Instagram">

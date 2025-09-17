@@ -610,6 +610,58 @@ body.modal-open{ overflow:hidden; }
 #latest-list a:hover::after, #latest-list a:focus-visible::after{
   transform: scaleX(1);
 }
+/* === Slider de Partidos === */
+.match-slider{ position:relative; }
+.slider-viewport{ overflow:hidden; }
+.slider-track{
+  display:flex; gap:24px;
+  transition: transform .35s ease;
+  will-change: transform;
+}
+/* nº de cartas visibles (lo pone JS con --slides) */
+.slide{ flex:0 0 calc(100% / var(--slides,1)); }
+
+.slider-btn{
+  position:absolute; top:50%; transform:translateY(-50%);
+  width:44px; height:44px; border-radius:50%;
+  border:0; cursor:pointer; z-index:2;
+  background:#fff; color:#0b2440; font-size:22px; box-shadow:var(--shadow);
+}
+.slider-btn.prev{ left:-8px; } .slider-btn.next{ right:-8px; }
+.slider-btn:disabled{ opacity:.4; cursor:not-allowed; }
+
+.slider-dots{ display:flex; gap:8px; justify-content:center; margin-top:14px; }
+.slider-dots .dot{
+  width:8px; height:8px; border-radius:999px; border:0; cursor:pointer;
+  background:#c8d4e6; transition:transform .18s ease, background .18s ease;
+}
+.slider-dots .dot.is-active{
+  background:linear-gradient(90deg,var(--brand),#ff7a1a);
+  transform:scale(1.25);
+}
+
+/* Responsive tweaks */
+@media (max-width:980px){
+  .slider-btn.prev{ left:2px; } .slider-btn.next{ right:2px; }
+}
+/* Slider 3-up fijo */
+.slider-viewport{ overflow:hidden; }
+.slider-track{
+  display:flex; gap:16px;
+  transition: transform .35s ease; will-change: transform;
+  touch-action: pan-y; cursor: grab;
+}
+.slider-track.is-dragging{ cursor: grabbing; }
+.slide{ flex:0 0 calc(100% / var(--slides, 3)); } /* 3 por vista */
+
+/* Cards más compactas cuando están en slider (para móviles) */
+.match-slider .match-card h3{ font-size: clamp(16px, 2.7vw, 18px); }
+.match-slider .match-card__meta{ padding:14px; }
+.match-slider .btn{ padding:10px 14px; }
+
+/* (Opcional) estilo para clones si hubo que rellenar */
+.slide.is-ghost{ opacity:.85; }
+
 
 
 
