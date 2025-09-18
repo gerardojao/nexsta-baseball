@@ -1206,27 +1206,26 @@ font-size:18px
 }
 
 }
-/* --- Mobile polish for the hero (iPhone 13 etc.) --- */
-
-/* Mueve ligeramente el foco del fondo hacia arriba para que no se vea tan “vacío” */
+/* ===== Hero: móvil casi full-height + indicador de scroll ===== */
 .hero{
-  background-position: center 30%;
+  position: relative;                     /* para los pseudo-elementos */
+  background-position: center 28%;
 }
 
-/* En móviles: menos altura y menos padding para que se vea antes la siguiente sección */
 @media (max-width: 768px){
   .hero{
-    /* usar viewport “seguro” en iOS */
-    min-height: 58svh;           /* Antes 66vh: mostramos más contenido */
-    background-attachment: scroll; /* Evita jank en iOS cuando hay 'fixed' */
-    padding-block: 36px;         /* Era 64px, queda más compacto */
+    min-height: 64svh;                    /* casi pantalla completa */
+    background-attachment: scroll;        /* iOS = suave */
+    padding-block: 48px;                  /* un poco de aire */
   }
   .hero__inner{
-    padding-block: 0;            /* ya ajustamos arriba */
+    position: relative;
+    z-index: 2;                           /* sobre el degradado */
+    padding-block: 0;
   }
   .hero h1{
     font-size: clamp(28px, 7vw, 44px);
-    max-width: 22ch;             /* líneas más cortas = mejor lectura */
+    max-width: 22ch;
     margin-inline: auto;
   }
   .lead{
@@ -1234,9 +1233,44 @@ font-size:18px
     max-width: 36ch;
     margin-inline: auto;
   }
+
+  /* Degradado inferior sutil para legibilidad del texto y
+     “empuje visual” a seguir bajando */
+  .hero::before{
+    content:"";
+    position:absolute; inset:auto 0 0 0;
+    height: 110px;
+    background: linear-gradient(to bottom,
+      rgba(0,0,0,0) 0%,
+      rgba(0,0,0,.2) 60%,
+      rgba(0,0,0,.35) 100%);
+    pointer-events:none;
+    z-index: 1;
+  }
+
+  /* Indicador de scroll (chevron) animado */
+  .hero::after{
+    content:"";
+    position:absolute;
+    left:50%; bottom:14px;
+    width:22px; height:22px;
+    border-right:2px solid rgba(255,255,255,.85);
+    border-bottom:2px solid rgba(255,255,255,.85);
+    transform: translate(-50%,0) rotate(45deg);
+    animation: heroScroll 1.4s ease-in-out infinite;
+    z-index: 3;
+    opacity:.9;
+  }
+  @keyframes heroScroll{
+    0%,100% { transform: translate(-50%,0)   rotate(45deg); opacity:.35; }
+    50%     { transform: translate(-50%,7px) rotate(45deg); opacity: .95; }
+  }
+
+  /* Respeta usuarios con reducción de movimiento */
+  @media (prefers-reduced-motion: reduce){
+    .hero::after{ animation:none; opacity:.55; }
+  }
 }
 
-/* Área táctil del menú un poco más generosa (recomendación Apple: 44px) */
-.nav-toggle{
-  padding: 10px;                 /* amplía el hit-area sin cambiar el layout */
-}
+/* Un poco más de área táctil para el menú */
+.nav-toggle{ padding:10px; }
